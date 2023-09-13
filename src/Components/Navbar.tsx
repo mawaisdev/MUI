@@ -14,11 +14,22 @@ import {
   StyledToolbar,
   Userbox,
 } from '../styles/styledComponents'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 export const Navbar = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false)
-  const handleOpen = () => {
-    setIsOpen(!isOpen)
+  const iconAvatarRef = useRef<HTMLDivElement | null>(null)
+  const userboxAvatarRef = useRef<HTMLDivElement | null>(null)
+  const [activeAvatarRef, setActiveAvatarRef] =
+    useState<React.RefObject<HTMLDivElement> | null>(null)
+
+  const handleOpen = (ref: React.RefObject<HTMLDivElement>) => {
+    setIsOpen(true)
+    setActiveAvatarRef(ref)
+  }
+
+  const handleClose = () => {
+    setIsOpen(false)
+    setActiveAvatarRef(null)
   }
   return (
     <AppBar position='sticky' sx={{ bgcolor: 'gray' }}>
@@ -37,18 +48,25 @@ export const Navbar = () => {
           <Badge badgeContent={4} color='error'>
             <Notifications />
           </Badge>
-          <Avatar alt='Name' onClick={handleOpen} />
+          <Avatar
+            alt='Name'
+            ref={iconAvatarRef}
+            onClick={() => handleOpen(iconAvatarRef)}
+          />
         </Icons>
         <Userbox>
-          <Avatar alt='Name' onClick={handleOpen} />
+          <Avatar
+            alt='Name'
+            ref={userboxAvatarRef}
+            onClick={() => handleOpen(userboxAvatarRef)}
+          />{' '}
           <Typography variant='subtitle1'>Awais</Typography>
         </Userbox>
       </StyledToolbar>
       <Menu
-        id='demo-positioned-menu'
-        aria-labelledby='demo-positioned-button'
         open={isOpen}
-        onClose={handleOpen}
+        onClose={handleClose}
+        anchorEl={activeAvatarRef?.current || undefined}
         anchorOrigin={{
           vertical: 'top',
           horizontal: 'right',
