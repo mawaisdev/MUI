@@ -1,7 +1,13 @@
-import './App.css'
+import { Feed, Rightbar, Sidebar } from './Components'
 
-function App() {
-  return <h1>Hello</h1>
+const App = () => {
+  return (
+    <div>
+      <Sidebar />
+      <Feed />
+      <Rightbar />
+    </div>
+  )
 }
 
 export default App
